@@ -51,10 +51,10 @@ export default function RDODocument({ data, logo }) {
           </h1>
         </div>
         <div className="flex flex-col">
-          <div className="border-b border-black px-2 py-1 text-xs font-bold">
+          <div className="border-b border-black px-2 py-1.5 text-xs font-bold">
             Nº RDO: <span className="font-normal">{numeroRdo}</span>
           </div>
-          <div className="border-b border-black px-2 py-1 text-xs font-bold">
+          <div className="border-b border-black px-2 py-1.5 text-xs font-bold">
             DATA: <span className="font-normal">{formatDateBR(dataObra)}</span>
           </div>
           <div className="rdo-section-title text-[10px] py-0.5">DIA DA SEMANA</div>
@@ -82,16 +82,16 @@ export default function RDODocument({ data, logo }) {
       {/* Informações gerais */}
       <div className="rdo-avoid-break">
         <div className="flex border-b border-black text-xs">
-          <div className="font-bold px-2 py-1 whitespace-nowrap">CLIENTE:</div>
-          <div className="px-2 py-1">{cliente}</div>
+          <div className="font-bold px-2 py-1.5 whitespace-nowrap">CLIENTE:</div>
+          <div className="px-2 py-1.5">{cliente}</div>
         </div>
         <div className="flex border-b border-black text-xs">
-          <div className="font-bold px-2 py-1 whitespace-nowrap">OBRA:</div>
-          <div className="px-2 py-1">{obra}</div>
+          <div className="font-bold px-2 py-1.5 whitespace-nowrap">OBRA:</div>
+          <div className="px-2 py-1.5">{obra}</div>
         </div>
         <div className="flex text-xs">
-          <div className="font-bold px-2 py-1 whitespace-nowrap">LOCAL:</div>
-          <div className="px-2 py-1">{local}</div>
+          <div className="font-bold px-2 py-1.5 whitespace-nowrap">LOCAL:</div>
+          <div className="px-2 py-1.5">{local}</div>
         </div>
       </div>
 
@@ -101,30 +101,30 @@ export default function RDODocument({ data, logo }) {
         <table className="table-fixed">
           <tbody>
             <tr>
-              <td colSpan={3} className="border border-black text-center font-bold text-xs py-1">
+              <td colSpan={3} className="border border-black text-center font-bold text-xs py-1.5">
                 HORAS NORMAIS
               </td>
-              <td colSpan={4} className="border border-black text-center font-bold text-xs py-1">
+              <td colSpan={4} className="border border-black text-center font-bold text-xs py-1.5">
                 HORAS SOBRE AVISO
               </td>
             </tr>
             <tr className="text-[10px] font-bold text-center">
-              <td className="border border-black py-1">INÍCIO</td>
-              <td className="border border-black py-1">TÉRMINO</td>
-              <td className="border border-black py-1">TOTAL</td>
-              <td className="border border-black py-1">INÍCIO</td>
-              <td className="border border-black py-1">TÉRMINO</td>
-              <td className="border border-black py-1">INÍCIO</td>
-              <td className="border border-black py-1">TÉRMINO</td>
+              <td className="border border-black py-1.5">INÍCIO</td>
+              <td className="border border-black py-1.5">TÉRMINO</td>
+              <td className="border border-black py-1.5">TOTAL</td>
+              <td className="border border-black py-1.5">INÍCIO</td>
+              <td className="border border-black py-1.5">TÉRMINO</td>
+              <td className="border border-black py-1.5">INÍCIO</td>
+              <td className="border border-black py-1.5">TÉRMINO</td>
             </tr>
             <tr className="text-xs text-center">
-              <td className="border border-black py-1">{horasNormais.inicio}</td>
-              <td className="border border-black py-1">{horasNormais.termino}</td>
-              <td className="border border-black py-1">{total}</td>
-              <td className="border border-black py-1">{horasAviso1.inicio}</td>
-              <td className="border border-black py-1">{horasAviso1.termino}</td>
-              <td className="border border-black py-1">{horasAviso2.inicio}</td>
-              <td className="border border-black py-1">{horasAviso2.termino}</td>
+              <td className="border border-black py-1.5">{horasNormais.inicio}</td>
+              <td className="border border-black py-1.5">{horasNormais.termino}</td>
+              <td className="border border-black py-1.5">{total}</td>
+              <td className="border border-black py-1.5">{horasAviso1.inicio}</td>
+              <td className="border border-black py-1.5">{horasAviso1.termino}</td>
+              <td className="border border-black py-1.5">{horasAviso2.inicio}</td>
+              <td className="border border-black py-1.5">{horasAviso2.termino}</td>
             </tr>
           </tbody>
         </table>
@@ -139,8 +139,8 @@ export default function RDODocument({ data, logo }) {
           <tbody>
             {equipe.map((item) => (
               <tr key={item.id} className="text-xs">
-                <td className="border border-black px-2 py-1">{item.funcao}</td>
-                <td className="border border-black px-2 py-1 text-center w-20">
+                <td className="border border-black px-2 py-1.5">{item.funcao}</td>
+                <td className="border border-black px-2 py-1.5 text-center w-20">
                   {item.qtd > 0 ? item.qtd : ''}
                 </td>
               </tr>

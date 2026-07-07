@@ -137,8 +137,12 @@ export default function App() {
               >
                 <div
                   style={{
-                    transform: `scale(${previewScale})`,
-                    transformOrigin: 'top left',
+                    // CSS zoom (not transform: scale) so the browser relayouts
+                    // and repaints hairline borders crisply at the scaled
+                    // size, instead of stretching an already-rasterized 1px
+                    // border — which at fractional scale factors anti-aliases
+                    // into what looks like a doubled line.
+                    zoom: previewScale,
                     width: RDO_PAGE_WIDTH,
                   }}
                 >
