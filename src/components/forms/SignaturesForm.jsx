@@ -1,4 +1,5 @@
 import Field, { inputClass } from '../ui/Field';
+import SignaturePad from '../ui/SignaturePad';
 
 export default function SignaturesForm({ data, onChange }) {
   const updateNested = (key, patch) => onChange({ ...data, [key]: { ...data[key], ...patch } });
@@ -27,6 +28,12 @@ export default function SignaturesForm({ data, onChange }) {
             />
           </Field>
         </div>
+        <Field label="Assinatura">
+          <SignaturePad
+            value={data.preservarEngenharia.assinatura}
+            onChange={(assinatura) => updateNested('preservarEngenharia', { assinatura })}
+          />
+        </Field>
       </section>
 
       <section className="space-y-4">
@@ -51,10 +58,13 @@ export default function SignaturesForm({ data, onChange }) {
             />
           </Field>
         </div>
+        <Field label="Assinatura">
+          <SignaturePad
+            value={data.fiscalizacao.assinatura}
+            onChange={(assinatura) => updateNested('fiscalizacao', { assinatura })}
+          />
+        </Field>
       </section>
-      <p className="text-xs text-gray-500">
-        As assinaturas físicas são coletadas diretamente no documento impresso ou em PDF.
-      </p>
     </div>
   );
 }

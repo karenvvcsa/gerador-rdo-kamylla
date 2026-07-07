@@ -176,8 +176,17 @@ export default function RDODocument({ data, logo }) {
               <span className="font-bold uppercase text-[10px]">Nome: </span>
               {preservarEngenharia.nome}
             </div>
-            <div className="border-t border-black pt-1">
-              <span className="font-bold uppercase text-[10px]">Assinatura:</span>
+            <div>
+              {preservarEngenharia.assinatura && (
+                <img
+                  src={preservarEngenharia.assinatura}
+                  alt="Assinatura de Preservar Engenharia"
+                  className="h-10 -mb-1 object-contain"
+                />
+              )}
+              <div className="border-t border-black pt-1">
+                <span className="font-bold uppercase text-[10px]">Assinatura:</span>
+              </div>
             </div>
           </div>
           <div className="p-2 text-xs flex flex-col justify-between">
@@ -189,8 +198,17 @@ export default function RDODocument({ data, logo }) {
               <span className="font-bold uppercase text-[10px]">Nome: </span>
               {fiscalizacao.nome}
             </div>
-            <div className="border-t border-black pt-1">
-              <span className="font-bold uppercase text-[10px]">Assinatura:</span>
+            <div>
+              {fiscalizacao.assinatura && (
+                <img
+                  src={fiscalizacao.assinatura}
+                  alt="Assinatura da Fiscalização"
+                  className="h-10 -mb-1 object-contain"
+                />
+              )}
+              <div className="border-t border-black pt-1">
+                <span className="font-bold uppercase text-[10px]">Assinatura:</span>
+              </div>
             </div>
           </div>
         </div>

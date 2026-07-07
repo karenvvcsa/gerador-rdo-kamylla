@@ -24,8 +24,8 @@ export function createDefaultState() {
     atividades: [''],
     observacoes: '',
     comentarios: '',
-    preservarEngenharia: { data: '', nome: '' },
-    fiscalizacao: { data: '', nome: '' },
+    preservarEngenharia: { data: '', nome: '', assinatura: '' },
+    fiscalizacao: { data: '', nome: '', assinatura: '' },
     fotos: [],
   };
 }
