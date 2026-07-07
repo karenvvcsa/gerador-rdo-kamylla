@@ -51,11 +51,11 @@ export default function RDODocument({ data, logo }) {
           </h1>
         </div>
         <div className="flex flex-col">
-          <div className="border-b border-black px-2 py-1.5 text-xs font-bold">
-            Nº RDO: <span className="font-normal">{numeroRdo}</span>
+          <div className="border-b border-black px-2 py-1.5 text-xs font-bold flex items-center justify-center">
+            Nº RDO: <span className="font-normal">&nbsp;{numeroRdo}</span>
           </div>
-          <div className="border-b border-black px-2 py-1.5 text-xs font-bold">
-            DATA: <span className="font-normal">{formatDateBR(dataObra)}</span>
+          <div className="border-b border-black px-2 py-1.5 text-xs font-bold flex items-center justify-center">
+            DATA: <span className="font-normal">&nbsp;{formatDateBR(dataObra)}</span>
           </div>
           <div className="rdo-section-title text-[10px] py-0.5">DIA DA SEMANA</div>
           <table className="text-center text-[10px] table-fixed">
@@ -81,15 +81,15 @@ export default function RDODocument({ data, logo }) {
 
       {/* Informações gerais */}
       <div className="rdo-avoid-break">
-        <div className="flex border-b border-black text-xs">
+        <div className="flex items-center justify-center border-b border-black text-xs">
           <div className="font-bold px-2 py-1.5 whitespace-nowrap">CLIENTE:</div>
           <div className="px-2 py-1.5">{cliente}</div>
         </div>
-        <div className="flex border-b border-black text-xs">
+        <div className="flex items-center justify-center border-b border-black text-xs">
           <div className="font-bold px-2 py-1.5 whitespace-nowrap">OBRA:</div>
           <div className="px-2 py-1.5">{obra}</div>
         </div>
-        <div className="flex text-xs">
+        <div className="flex items-center justify-center text-xs">
           <div className="font-bold px-2 py-1.5 whitespace-nowrap">LOCAL:</div>
           <div className="px-2 py-1.5">{local}</div>
         </div>
@@ -139,7 +139,7 @@ export default function RDODocument({ data, logo }) {
           <tbody>
             {equipe.map((item) => (
               <tr key={item.id} className="text-xs">
-                <td className="border border-black px-2 py-1.5">{item.funcao}</td>
+                <td className="border border-black px-2 py-1.5 text-center">{item.funcao}</td>
                 <td className="border border-black px-2 py-1.5 text-center w-20">
                   {item.qtd > 0 ? item.qtd : ''}
                 </td>
@@ -167,7 +167,7 @@ export default function RDODocument({ data, logo }) {
           <div className="rdo-section-title text-xs py-1">Fiscalização</div>
         </div>
         <div className="grid grid-cols-2 min-h-[130px]">
-          <div className="border-r border-black p-2 text-xs flex flex-col justify-between">
+          <div className="border-r border-black p-2 text-xs flex flex-col justify-between text-center">
             <div>
               <span className="font-bold uppercase text-[10px]">Data: </span>
               {formatDateBR(preservarEngenharia.data)}
@@ -181,7 +181,7 @@ export default function RDODocument({ data, logo }) {
                 <img
                   src={preservarEngenharia.assinatura}
                   alt="Assinatura de Preservar Engenharia"
-                  className="h-10 -mb-1 object-contain"
+                  className="h-10 mx-auto -mb-1 object-contain"
                 />
               )}
               <div className="border-t border-black pt-1">
@@ -189,7 +189,7 @@ export default function RDODocument({ data, logo }) {
               </div>
             </div>
           </div>
-          <div className="p-2 text-xs flex flex-col justify-between">
+          <div className="p-2 text-xs flex flex-col justify-between text-center">
             <div>
               <span className="font-bold uppercase text-[10px]">Data: </span>
               {formatDateBR(fiscalizacao.data)}
@@ -203,7 +203,7 @@ export default function RDODocument({ data, logo }) {
                 <img
                   src={fiscalizacao.assinatura}
                   alt="Assinatura da Fiscalização"
-                  className="h-10 -mb-1 object-contain"
+                  className="h-10 mx-auto -mb-1 object-contain"
                 />
               )}
               <div className="border-t border-black pt-1">

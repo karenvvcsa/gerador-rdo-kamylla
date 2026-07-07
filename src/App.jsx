@@ -53,6 +53,10 @@ export default function App() {
     };
   }, [mobileView]);
 
+  const activeTabIndex = TABS.findIndex((tab) => tab.id === activeTab);
+  const goToPrevTab = () => setActiveTab(TABS[activeTabIndex - 1].id);
+  const goToNextTab = () => setActiveTab(TABS[activeTabIndex + 1].id);
+
   const handleExport = async () => {
     if (!exportRef.current) return;
     setExporting(true);
@@ -120,6 +124,25 @@ export default function App() {
               {activeTab === 'atividades' && <ActivitiesForm data={data} onChange={setData} />}
               {activeTab === 'assinaturas' && <SignaturesForm data={data} onChange={setData} />}
               {activeTab === 'fotos' && <PhotosForm fotos={data.fotos} onChange={setFotos} />}
+
+              <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4">
+                <button
+                  type="button"
+                  onClick={goToPrevTab}
+                  disabled={activeTabIndex === 0}
+                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-0 disabled:pointer-events-none transition"
+                >
+                  ← Voltar
+                </button>
+                <button
+                  type="button"
+                  onClick={goToNextTab}
+                  disabled={activeTabIndex === TABS.length - 1}
+                  className="rounded-lg bg-primary-500 hover:bg-primary-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-0 disabled:pointer-events-none transition"
+                >
+                  Próximo →
+                </button>
+              </div>
             </div>
           </div>
         </section>
