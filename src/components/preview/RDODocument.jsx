@@ -31,7 +31,12 @@ export default function RDODocument({ data, logo }) {
   return (
     <div
       className="rdo-page border border-black divide-y divide-black text-black"
-      style={{ width: RDO_PAGE_WIDTH }}
+      // A fixed minHeight of exactly one page keeps this document's bottom
+      // edge reliably aligned to the PDF page boundary, so anything appended
+      // after it (the photo annex) starts cleanly at the top of the next
+      // page without needing an explicit CSS page-break — see PhotoAnnex.jsx
+      // for why forcing that break is actually harmful.
+      style={{ width: RDO_PAGE_WIDTH, minHeight: RDO_PAGE_HEIGHT }}
     >
       {/* Cabeçalho */}
       <div className="grid grid-cols-[140px_1fr_260px] rdo-avoid-break">

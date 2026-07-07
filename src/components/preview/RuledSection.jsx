@@ -17,8 +17,8 @@ export default function RuledSection({ title, lines, minLines = 8 }) {
       <div className="rdo-avoid-break">
         <div className="rdo-section-title text-xs py-1">{title}</div>
         <div
-          className="rdo-ruled-line px-2 text-xs leading-[22px]"
-          style={{ height: LINE_HEIGHT }}
+          className="rdo-avoid-break rdo-ruled-line px-2 text-xs break-words"
+          style={{ minHeight: LINE_HEIGHT, lineHeight: `${LINE_HEIGHT}px` }}
         >
           {firstRow}
         </div>
@@ -26,8 +26,8 @@ export default function RuledSection({ title, lines, minLines = 8 }) {
       {restRows.map((text, i) => (
         <div
           key={i}
-          className="rdo-ruled-line px-2 text-xs leading-[22px]"
-          style={{ height: LINE_HEIGHT }}
+          className="rdo-avoid-break rdo-ruled-line px-2 text-xs break-words"
+          style={{ minHeight: LINE_HEIGHT, lineHeight: `${LINE_HEIGHT}px` }}
         >
           {text}
         </div>
