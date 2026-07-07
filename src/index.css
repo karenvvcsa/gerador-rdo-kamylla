@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary-50: #faf7f5;
+  --color-primary-100: #f2ebe5;
+  --color-primary-200: #e5d5c9;
+  --color-primary-300: #dcc7b8;
+  --color-primary-400: #cfbba8;
+  --color-primary-500: #b89c85;
+  --color-primary-600: #a3826a;
+  --color-primary-700: #866957;
+  --color-primary-800: #6c5546;
+  --color-primary-900: #59463a;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  background: #f4f1ee;
+}
+
+/* RDO document rendering rules — shared by live preview and PDF export */
+.rdo-page {
+  background: #ffffff;
+  color: #111111;
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.rdo-page table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.rdo-page td,
+.rdo-page th {
+  border: 1px solid #000;
+}
+
+.rdo-section-title {
+  background: #b3b3b3;
+  color: #000;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.rdo-ruled-line {
+  border-bottom: 1px solid #000;
+  page-break-inside: avoid;
+}
+
+.rdo-avoid-break {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
