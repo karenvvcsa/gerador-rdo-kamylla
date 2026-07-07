@@ -175,12 +175,20 @@ export default function App() {
               >
                 <div
                   style={{
-                    // CSS zoom (not transform: scale) so the browser relayouts
-                    // and repaints hairline borders crisply at the scaled
-                    // size, instead of stretching an already-rasterized 1px
-                    // border — which at fractional scale factors anti-aliases
-                    // into what looks like a doubled line.
-                    zoom: previewScale,
+                    // transform: scale, not CSS zoom: zoom is non-standard and
+                    // its layout recalculation at the aggressive scale factors
+                    // mobile needs (~0.4x, since the preview column is much
+                    // narrower than on desktop) has been observed to mis-lay-out
+                    // this table-heavy document on real mobile Safari — cells
+                    // overlapping, the header wrapping to extra lines. transform
+                    // only scales the already-correctly-laid-out pixels, so it
+                    // can't misplace content; the trade-off is that hairline
+                    // borders can anti-alias into a faint double line at
+                    // fractional scales, which is a minor cosmetic issue in this
+                    // preview only — the exported PDF is rendered separately, at
+                    // full size, and is unaffected either way.
+                    transform: `scale(${previewScale})`,
+                    transformOrigin: 'top left',
                     width: RDO_PAGE_WIDTH,
                   }}
                 >
