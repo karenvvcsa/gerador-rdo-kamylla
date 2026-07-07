@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useRef, useState } from 'react';
 import Tabs from './components/Tabs';
 import GeneralInfoForm from './components/forms/GeneralInfoForm';
@@ -111,7 +113,7 @@ export default function App() {
         <section className={`${mobileView === 'form' ? 'block' : 'hidden'} lg:block min-w-0`}>
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
             <Tabs tabs={TABS} active={activeTab} onChange={setActiveTab} />
-            <div className="p-4 sm:p-6">
+            <div className="p-4 sm:p-6 pb-24 lg:pb-6">
               {activeTab === 'geral' && (
                 <GeneralInfoForm data={data} onChange={setData} logo={logo} onLogoChange={setLogo} />
               )}
@@ -124,35 +126,38 @@ export default function App() {
               {activeTab === 'atividades' && <ActivitiesForm data={data} onChange={setData} />}
               {activeTab === 'assinaturas' && <SignaturesForm data={data} onChange={setData} />}
               {activeTab === 'fotos' && <PhotosForm fotos={data.fotos} onChange={setFotos} />}
+            </div>
 
-              <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4">
+            {/* Sticks to the bottom of the viewport on mobile so the primary
+                actions stay thumb-reachable without scrolling back up a long
+                form; on desktop (lg+) it's just the card's static footer. */}
+            <div className="sticky bottom-0 lg:static flex items-center justify-between gap-3 rounded-b-xl border-t border-gray-100 bg-white px-4 sm:px-6 py-3 lg:py-4">
+              <button
+                type="button"
+                onClick={goToPrevTab}
+                disabled={activeTabIndex === 0}
+                className="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-0 disabled:pointer-events-none transition"
+              >
+                ← Voltar
+              </button>
+              {activeTabIndex === TABS.length - 1 ? (
                 <button
                   type="button"
-                  onClick={goToPrevTab}
-                  disabled={activeTabIndex === 0}
-                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-0 disabled:pointer-events-none transition"
+                  onClick={handleExport}
+                  disabled={exporting}
+                  className="rounded-lg bg-primary-500 hover:bg-primary-600 disabled:opacity-60 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition"
                 >
-                  ← Voltar
+                  {exporting ? 'Gerando PDF…' : 'Exportar PDF'}
                 </button>
-                {activeTabIndex === TABS.length - 1 ? (
-                  <button
-                    type="button"
-                    onClick={handleExport}
-                    disabled={exporting}
-                    className="rounded-lg bg-primary-500 hover:bg-primary-600 disabled:opacity-60 px-4 py-2 text-sm font-medium text-white shadow-sm transition"
-                  >
-                    {exporting ? 'Gerando PDF…' : 'Exportar PDF'}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={goToNextTab}
-                    className="rounded-lg bg-primary-500 hover:bg-primary-600 px-4 py-2 text-sm font-medium text-white transition"
-                  >
-                    Próximo →
-                  </button>
-                )}
-              </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={goToNextTab}
+                  className="rounded-lg bg-primary-500 hover:bg-primary-600 px-4 py-2.5 text-sm font-medium text-white transition"
+                >
+                  Próximo →
+                </button>
+              )}
             </div>
           </div>
         </section>

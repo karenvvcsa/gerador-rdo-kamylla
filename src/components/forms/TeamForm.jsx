@@ -36,7 +36,7 @@ export default function TeamForm({ equipe, onChange }) {
             <button
               type="button"
               onClick={() => removeItem(item.id)}
-              className="text-gray-400 hover:text-red-600 transition shrink-0"
+              className="flex items-center justify-center w-10 h-10 -m-1 text-gray-400 hover:text-red-600 transition shrink-0"
               aria-label="Remover função"
             >
               ✕
