@@ -1,4 +1,4 @@
-const LINE_HEIGHT = 22;
+const LINE_HEIGHT = 28;
 
 // Renders a gray section title bar followed by ruled (notebook-style) lines.
 // `lines` holds the filled-in text lines; the section always pads out to
@@ -17,8 +17,8 @@ export default function RuledSection({ title, lines, minLines = 8 }) {
       <div className="rdo-avoid-break">
         <div className="rdo-section-title text-xs py-1">{title}</div>
         <div
-          className="rdo-avoid-break rdo-ruled-line px-2 text-xs break-words"
-          style={{ minHeight: LINE_HEIGHT, lineHeight: `${LINE_HEIGHT}px` }}
+          className="rdo-avoid-break rdo-ruled-line px-2 py-1.5 text-xs break-words"
+          style={{ minHeight: LINE_HEIGHT, boxSizing: 'border-box' }}
         >
           {firstRow}
         </div>
@@ -26,8 +26,8 @@ export default function RuledSection({ title, lines, minLines = 8 }) {
       {restRows.map((text, i) => (
         <div
           key={i}
-          className="rdo-avoid-break rdo-ruled-line px-2 text-xs break-words"
-          style={{ minHeight: LINE_HEIGHT, lineHeight: `${LINE_HEIGHT}px` }}
+          className="rdo-avoid-break rdo-ruled-line px-2 py-1.5 text-xs break-words"
+          style={{ minHeight: LINE_HEIGHT, boxSizing: 'border-box' }}
         >
           {text}
         </div>

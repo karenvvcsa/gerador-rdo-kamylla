@@ -150,13 +150,13 @@ export default function RDODocument({ data, logo }) {
       </div>
 
       {/* Atividades realizadas */}
-      <RuledSection title="Atividades Realizadas" lines={atividades} minLines={9} />
+      <RuledSection title="Atividades Realizadas" lines={atividades} minLines={7} />
 
       {/* Observações */}
-      <RuledSection title="Observações" lines={observacoesLines} minLines={7} />
+      <RuledSection title="Observações" lines={observacoesLines} minLines={5} />
 
       {/* Comentários do cliente */}
-      <RuledSection title="Comentários do Cliente" lines={comentariosLines} minLines={4} />
+      <RuledSection title="Comentários do Cliente" lines={comentariosLines} minLines={3} />
 
       {/* Assinaturas */}
       <div className="rdo-avoid-break">
