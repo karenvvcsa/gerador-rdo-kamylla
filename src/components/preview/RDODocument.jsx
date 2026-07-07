@@ -57,7 +57,7 @@ export default function RDODocument({ data, logo }) {
           <div className="border-b border-black px-2 py-1.5 text-xs font-bold flex items-center">
             DATA: <span className="font-normal">&nbsp;{formatDateBR(dataObra)}</span>
           </div>
-          <div className="rdo-section-title text-[10px] py-0.5">DIA DA SEMANA</div>
+          <div className="rdo-section-title text-[10px]">DIA DA SEMANA</div>
           <table className="text-center text-[10px] table-fixed">
             <tbody>
               <tr>
@@ -97,7 +97,7 @@ export default function RDODocument({ data, logo }) {
 
       {/* Apropriação de horas */}
       <div className="rdo-avoid-break">
-        <div className="rdo-section-title text-xs py-1">APROPRIAÇÃO DE HORAS DE TRABALHO</div>
+        <div className="rdo-section-title text-xs">APROPRIAÇÃO DE HORAS DE TRABALHO</div>
         <table className="table-fixed">
           <tbody>
             <tr>
@@ -161,10 +161,10 @@ export default function RDODocument({ data, logo }) {
       {/* Assinaturas */}
       <div className="rdo-avoid-break">
         <div className="grid grid-cols-2">
-          <div className="rdo-section-title border-r border-black text-xs py-1">
+          <div className="rdo-section-title border-r border-black text-xs">
             Preservar Engenharia
           </div>
-          <div className="rdo-section-title text-xs py-1">Fiscalização</div>
+          <div className="rdo-section-title text-xs">Fiscalização</div>
         </div>
         <div className="grid grid-cols-2 min-h-[130px]">
           <div className="border-r border-black p-2 text-xs flex flex-col justify-between">

@@ -15,7 +15,7 @@ export default function RuledSection({ title, lines, minLines = 8 }) {
       {/* Glue the title to its first line so the header never gets orphaned
           alone at the bottom of a page; remaining lines can flow freely. */}
       <div className="rdo-avoid-break">
-        <div className="rdo-section-title text-xs py-1">{title}</div>
+        <div className="rdo-section-title text-xs">{title}</div>
         <div
           className="rdo-avoid-break rdo-ruled-line px-2 py-1.5 text-xs break-words"
           style={{ minHeight: LINE_HEIGHT, boxSizing: 'border-box' }}

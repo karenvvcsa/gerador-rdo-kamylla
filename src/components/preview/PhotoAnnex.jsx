@@ -29,7 +29,7 @@ export default function PhotoAnnex({ fotos }) {
 
   return (
     <div className="rdo-page border border-black" style={{ width: RDO_PAGE_WIDTH }}>
-      <div className="rdo-section-title text-xs py-1">Anexo Fotográfico</div>
+      <div className="rdo-section-title text-xs">Anexo Fotográfico</div>
       <div className="p-4">
         {chunkPairs(fotos).map((pair, i) => (
           <div key={i} className="rdo-avoid-break flex gap-4 mb-4 last:mb-0">

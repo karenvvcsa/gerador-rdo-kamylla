@@ -16,12 +16,20 @@ export async function exportRdoToPdf(node, filename) {
   const options = {
     margin: PAGE_MARGIN,
     filename,
-    image: { type: 'jpeg', quality: 0.98 },
+    // PNG instead of JPEG: this is one raster snapshot of the whole page —
+    // borders, hairline rules and small caps text — and JPEG's block
+    // compression visibly softens/artifacts exactly that kind of sharp-edge
+    // content. PNG is lossless, at the cost of a larger file.
+    image: { type: 'png' },
     html2canvas: {
-      scale: 2,
+      // Higher than html2canvas's own default (1x) or a minimal 2x: this is
+      // a text-heavy document that gets read up close and printed, so the
+      // extra resolution is worth the larger canvas/export time.
+      scale: 3,
       useCORS: true,
       backgroundColor: '#ffffff',
       windowWidth: RDO_PAGE_WIDTH,
+      letterRendering: true,
     },
     // Named formats (e.g. "a4") are looked up in points regardless of `unit`,
     // which mismatches our px-based layout and crops content. An explicit
@@ -30,6 +38,9 @@ export async function exportRdoToPdf(node, filename) {
       unit: 'px',
       format: [RDO_PAGE_WIDTH + PAGE_MARGIN * 2, RDO_PAGE_HEIGHT + PAGE_MARGIN * 2],
       orientation: 'portrait',
+      // Lossless PDF stream compression — trims the larger PNG payload back
+      // down without touching image fidelity.
+      compress: true,
     },
     // Only "css" mode: breaks are governed by our explicit .rdo-avoid-break
     // rules. "avoid-all" is intentionally omitted — it treats every element

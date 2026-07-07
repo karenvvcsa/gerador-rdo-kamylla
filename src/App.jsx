@@ -134,14 +134,24 @@ export default function App() {
                 >
                   ← Voltar
                 </button>
-                <button
-                  type="button"
-                  onClick={goToNextTab}
-                  disabled={activeTabIndex === TABS.length - 1}
-                  className="rounded-lg bg-primary-500 hover:bg-primary-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-0 disabled:pointer-events-none transition"
-                >
-                  Próximo →
-                </button>
+                {activeTabIndex === TABS.length - 1 ? (
+                  <button
+                    type="button"
+                    onClick={handleExport}
+                    disabled={exporting}
+                    className="rounded-lg bg-primary-500 hover:bg-primary-600 disabled:opacity-60 px-4 py-2 text-sm font-medium text-white shadow-sm transition"
+                  >
+                    {exporting ? 'Gerando PDF…' : 'Exportar PDF'}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={goToNextTab}
+                    className="rounded-lg bg-primary-500 hover:bg-primary-600 px-4 py-2 text-sm font-medium text-white transition"
+                  >
+                    Próximo →
+                  </button>
+                )}
               </div>
             </div>
           </div>

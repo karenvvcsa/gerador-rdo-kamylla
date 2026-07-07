@@ -49,6 +49,17 @@ body {
   text-transform: uppercase;
   text-align: center;
   letter-spacing: 0.5px;
+  line-height: 1;
+  /* Deliberately asymmetric padding, not a bug: html2canvas renders bold
+     text measurably lower within its box than the live DOM shows (verified
+     with pixel-level measurements of the exported PDF — it's a rasterizer
+     quirk in how it computes the text baseline for bold weights, not
+     something fixable via line-height or box-sizing). This compensates so
+     the *exported PDF* ends up visually centered; the live preview will
+     look slightly top-heavy by comparison, which is the accepted trade-off
+     since the PDF is the deliverable.  */
+  padding-top: 0.05em;
+  padding-bottom: 0.85em;
 }
 
 .rdo-ruled-line {
