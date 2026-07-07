@@ -23,6 +23,19 @@ body {
   background: #f4f1ee;
 }
 
+/* iOS Safari renders type="date"/"time" with its own native picker chrome
+   that doesn't fully respect the box's width: 100% — a sliver of it pokes
+   past the container on narrow screens regardless of grid/flex sizing.
+   Stripping the native appearance lets our own box model (width, padding,
+   border) fully control the size; the input is still tappable to open the
+   native picker either way. */
+input[type='date'],
+input[type='time'] {
+  -webkit-appearance: none;
+  appearance: none;
+  max-width: 100%;
+}
+
 /* RDO document rendering rules — shared by live preview and PDF export */
 .rdo-page {
   background: #ffffff;
