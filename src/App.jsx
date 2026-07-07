@@ -6,7 +6,7 @@ import ActivitiesForm from './components/forms/ActivitiesForm';
 import SignaturesForm from './components/forms/SignaturesForm';
 import PhotosForm from './components/forms/PhotosForm';
 import RDODocument, { RDO_PAGE_WIDTH, RDO_PAGE_HEIGHT } from './components/preview/RDODocument';
-import PhotoAnnex from './components/preview/PhotoAnnex';
+import PhotoAnnex, { chunkFotosIntoPages } from './components/preview/PhotoAnnex';
 import { createDefaultState } from './data/defaultState';
 import { exportRdoToPdf } from './utils/pdfExport';
 
@@ -71,18 +71,18 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f4f1ee]">
       <header className="bg-white border-b border-gray-200 sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
-          <div>
-            <h1 className="text-lg font-bold text-gray-900">Gerador de RDO</h1>
-            <p className="text-xs text-gray-500">Relatório Diário de Obra</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <h1 className="text-base sm:text-lg font-bold text-gray-900 truncate">Gerador de RDO</h1>
+            <p className="text-xs text-gray-500 truncate">Relatório Diário de Obra</p>
           </div>
           <button
             type="button"
             onClick={handleExport}
             disabled={exporting}
-            className="rounded-lg bg-primary-500 hover:bg-primary-600 disabled:opacity-60 text-white font-semibold px-4 py-2.5 text-sm shadow-sm transition"
+            className="shrink-0 whitespace-nowrap rounded-lg bg-primary-500 hover:bg-primary-600 disabled:opacity-60 text-white font-semibold px-3 py-2 text-xs sm:px-4 sm:py-2.5 sm:text-sm shadow-sm transition"
           >
-            {exporting ? 'Gerando PDF…' : 'Exportar PDF'}
+            {exporting ? 'Gerando…' : 'Exportar PDF'}
           </button>
         </div>
         <div className="lg:hidden max-w-7xl mx-auto px-4 pb-2 flex gap-2">
@@ -191,7 +191,9 @@ export default function App() {
       <div style={{ position: 'fixed', top: 0, left: '-9999px', zIndex: -1 }}>
         <div ref={exportRef}>
           <RDODocument data={data} logo={logo} />
-          <PhotoAnnex fotos={data.fotos} />
+          {chunkFotosIntoPages(data.fotos).map((pageFotos, i) => (
+            <PhotoAnnex key={i} fotos={pageFotos} />
+          ))}
         </div>
       </div>
     </div>

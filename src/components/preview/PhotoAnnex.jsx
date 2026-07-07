@@ -1,4 +1,4 @@
-import { RDO_PAGE_WIDTH } from './RDODocument';
+import { RDO_PAGE_WIDTH, RDO_PAGE_HEIGHT } from './RDODocument';
 
 function chunkPairs(items) {
   const pairs = [];
@@ -8,31 +8,38 @@ function chunkPairs(items) {
   return pairs;
 }
 
-// Photographic annex, rendered on its own PDF page — 2 photos per row with captions.
-//
-// The rows use plain flexbox scoped to each pair, not a CSS grid spanning all
-// photos. html2pdf's page-break-avoidance works by inserting a plain sibling
-// "pad" div before an element that would otherwise straddle a page break.
-// Inside a grid container that inserted div becomes a real grid item and
-// steals a cell, shifting every photo after it into the wrong column and
-// letting images get cut mid-image across the page boundary. A block-level
-// stack of independent row rows keeps each inserted pad div harmless.
-//
-// This is deliberately NOT forced onto a new page via CSS page-break-before.
-// RDODocument reserves exactly one page of height, so this annex already
-// starts right at the next page boundary; html2pdf's break-before handling
-// has an edge case where forcing a break on an element that lands only a
-// few pixels past a boundary skips an entire page forward, leaving a blank
-// page in between. Relying on natural flow sidesteps that bug.
+// 3 rows x 2 columns per page. Measured against the actual row height (224px
+// photo + ~40px caption + gaps) plus the title bar and padding, this leaves
+// real headroom under RDO_PAGE_HEIGHT even when a caption wraps to two
+// lines, so a page's photos never spill past the fixed page height below —
+// each annex page renders as one self-contained, exactly-one-page PDF page.
+export const PHOTOS_PER_PAGE = 6;
+
+export function chunkFotosIntoPages(fotos) {
+  const pages = [];
+  for (let i = 0; i < fotos.length; i += PHOTOS_PER_PAGE) {
+    pages.push(fotos.slice(i, i + PHOTOS_PER_PAGE));
+  }
+  return pages;
+}
+
+// One photographic annex page — 2 photos per row with captions, capped at
+// PHOTOS_PER_PAGE so it always fits a fixed RDO_PAGE_HEIGHT exactly (the PDF
+// export captures each top-level page node as its own canvas at that fixed
+// size, so a page's content must never rely on overflowing into the next
+// one — see pdfExport.js).
 export default function PhotoAnnex({ fotos }) {
   if (!fotos || fotos.length === 0) return null;
 
   return (
-    <div className="rdo-page border border-black" style={{ width: RDO_PAGE_WIDTH }}>
+    <div
+      className="rdo-page border border-black overflow-hidden"
+      style={{ width: RDO_PAGE_WIDTH, height: RDO_PAGE_HEIGHT }}
+    >
       <div className="rdo-section-title text-xs">Anexo Fotográfico</div>
       <div className="p-4">
         {chunkPairs(fotos).map((pair, i) => (
-          <div key={i} className="rdo-avoid-break flex gap-4 mb-4 last:mb-0">
+          <div key={i} className="flex gap-4 mb-4 last:mb-0">
             {pair.map((foto) => (
               <div key={foto.id} className="flex-1 border border-black">
                 <img

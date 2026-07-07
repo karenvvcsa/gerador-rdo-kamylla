@@ -1,31 +1,72 @@
-import html2pdf from 'html2pdf.js';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { RDO_PAGE_WIDTH, RDO_PAGE_HEIGHT } from '../components/preview/RDODocument';
 
 // Visible white margin around the document on the printed page, in px
-// (~0.33in at 96dpi). The PDF's page size is the content size plus this
-// margin on every side; html2pdf's "inner" content area then works out to
-// exactly RDO_PAGE_WIDTH x RDO_PAGE_HEIGHT again, so none of our
-// page-height-based pagination math (RDODocument's minHeight, the
-// avoid-break page-break math) needs to change to account for it.
+// (~0.33in at 96dpi).
 const PAGE_MARGIN = 32;
 
 const DESIRED_SCALE = 3;
 
-// html2canvas rasterizes the *entire* multi-page document (RDO page +
-// however many photo-annex pages) into one canvas before jsPDF slices it
-// per page. Mobile browsers — iOS Safari in particular — silently fail
-// (blank/garbled output, no error) once that canvas exceeds a few tens of
-// millions of pixels, which a report with many photos hits easily at
-// DESIRED_SCALE. Capping the scale to keep total canvas area under a safe
-// budget trades a bit of sharpness for the export actually working; a
-// typical one-page report with few photos still gets the full scale.
+// A single page's raster stays comfortably under this budget at
+// DESIRED_SCALE (RDO_PAGE_WIDTH x RDO_PAGE_HEIGHT x 3^2 ≈ 8M px), so this
+// only ever kicks in for the rare report whose activities/observations
+// overflow past RDODocument's default minHeight — see sliceCanvasIntoPages.
 const MAX_CANVAS_AREA = 16_000_000;
 const MIN_SCALE = 1.5;
 
-function computeSafeScale(node) {
-  const area = node.scrollWidth * node.scrollHeight * DESIRED_SCALE * DESIRED_SCALE;
+function computeSafeScale(width, height) {
+  const area = width * height * DESIRED_SCALE * DESIRED_SCALE;
   if (area <= MAX_CANVAS_AREA) return DESIRED_SCALE;
-  return Math.max(MIN_SCALE, Math.sqrt(MAX_CANVAS_AREA / (node.scrollWidth * node.scrollHeight)));
+  return Math.max(MIN_SCALE, Math.sqrt(MAX_CANVAS_AREA / (width * height)));
+}
+
+// Captures one top-level page node (RDODocument or a PhotoAnnex page) as its
+// own canvas. windowHeight is set to the node's own full height rather than
+// left at the real (often much shorter, on mobile) window height — leaving
+// it at the default caused html2canvas's mobile clone to compute scroll
+// offsets against the visible viewport instead of the actual content,
+// which is what produced badly cropped/misplaced captures on phones.
+async function captureNode(node) {
+  const scale = computeSafeScale(node.scrollWidth, node.scrollHeight);
+  const canvas = await html2canvas(node, {
+    scale,
+    useCORS: true,
+    backgroundColor: '#ffffff',
+    windowWidth: RDO_PAGE_WIDTH,
+    windowHeight: node.scrollHeight,
+    letterRendering: true,
+  });
+  return { canvas, scale };
+}
+
+// Slices a captured node's canvas into RDO_PAGE_HEIGHT-tall (at its scale)
+// bands, one per PDF page. Every page node is designed to fit in exactly one
+// band (RDODocument via its minHeight, PhotoAnnex via PHOTOS_PER_PAGE), so
+// this normally returns a single, exact-size page. It only produces more
+// than one when a report has more activity/observation lines than the
+// default minimums push RDODocument taller than one page — in that rare
+// case a line could in principle land across a slice boundary, since this
+// is plain pixel slicing with no break-avoidance. That's an accepted
+// trade-off: the alternative, html2pdf's own break-avoidance, is what
+// produced badly mispaginated (mostly-blank-page) output on real mobile
+// browsers that this manual approach replaces.
+function sliceCanvasIntoPages(canvas, scale) {
+  const pageHeightPx = Math.round(RDO_PAGE_HEIGHT * scale);
+  const pageCount = Math.max(1, Math.round(canvas.height / pageHeightPx));
+  const pages = [];
+  for (let i = 0; i < pageCount; i++) {
+    const sliceHeight = Math.min(pageHeightPx, canvas.height - i * pageHeightPx);
+    const pageCanvas = document.createElement('canvas');
+    pageCanvas.width = canvas.width;
+    pageCanvas.height = pageHeightPx;
+    const ctx = pageCanvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+    ctx.drawImage(canvas, 0, i * pageHeightPx, canvas.width, sliceHeight, 0, 0, canvas.width, sliceHeight);
+    pages.push(pageCanvas);
+  }
+  return pages;
 }
 
 // Hands the generated PDF to the user. The Web Share API's file-sharing
@@ -60,50 +101,43 @@ async function savePdfBlob(blob, filename) {
   setTimeout(() => URL.revokeObjectURL(url), 30000);
 }
 
-// Renders the given DOM node (the RDO document + optional photo annex) to a
-// high-resolution PDF, forcing background colors and avoiding ugly mid-section
-// page breaks.
-export async function exportRdoToPdf(node, filename) {
-  const options = {
-    margin: PAGE_MARGIN,
-    filename,
-    // PNG instead of JPEG: this is one raster snapshot of the whole page —
-    // borders, hairline rules and small caps text — and JPEG's block
-    // compression visibly softens/artifacts exactly that kind of sharp-edge
-    // content. PNG is lossless, at the cost of a larger file.
-    image: { type: 'png' },
-    html2canvas: {
-      scale: computeSafeScale(node),
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      windowWidth: RDO_PAGE_WIDTH,
-      // Explicitly matching the full content height (not just width) avoids
-      // an html2canvas mobile bug: without it, the simulated capture
-      // viewport defaults to the real window's height — a few hundred px on
-      // a phone — and the clone's scroll/offset math gets computed against
-      // that instead of the actual multi-page content, cropping or
-      // shifting everything below the first screenful.
-      windowHeight: node.scrollHeight,
-      letterRendering: true,
-    },
-    // Named formats (e.g. "a4") are looked up in points regardless of `unit`,
-    // which mismatches our px-based layout and crops content. An explicit
-    // [width, height] pair in px keeps the PDF page the same size as the DOM.
-    jsPDF: {
-      unit: 'px',
-      format: [RDO_PAGE_WIDTH + PAGE_MARGIN * 2, RDO_PAGE_HEIGHT + PAGE_MARGIN * 2],
-      orientation: 'portrait',
-      // Lossless PDF stream compression — trims the larger PNG payload back
-      // down without touching image fidelity.
-      compress: true,
-    },
-    // Only "css" mode: breaks are governed by our explicit .rdo-avoid-break
-    // rules. "avoid-all" is intentionally omitted — it treats every element
-    // as unbreakable, which forces entire sections onto a new page and
-    // leaves large ugly gaps instead of a clean, tight break.
-    pagebreak: { mode: ['css'] },
-  };
+// Renders the export container (RDODocument + one PhotoAnnex per photo page,
+// as direct children — see App.jsx) to a high-resolution PDF. Each child is
+// captured and placed as its own PDF page directly via jsPDF, instead of
+// handing one combined tall canvas to html2pdf's automatic CSS-avoid-break
+// pagination — that automatic pagination is what produced severely
+// mispaginated (mostly blank) pages on real mobile browsers, since its
+// break-point math depends on getBoundingClientRect() measurements of the
+// cloned document that don't reproduce identically across devices. Manual
+// per-node capture has no such ambiguity: each node's page boundary is
+// simply where the node itself ends.
+export async function exportRdoToPdf(container, filename) {
+  const pageWidth = RDO_PAGE_WIDTH + PAGE_MARGIN * 2;
+  const pageHeight = RDO_PAGE_HEIGHT + PAGE_MARGIN * 2;
 
-  const blob = await html2pdf().set(options).from(node).outputPdf('blob');
+  const doc = new jsPDF({
+    unit: 'px',
+    format: [pageWidth, pageHeight],
+    orientation: 'portrait',
+    // Lossless PDF stream compression — trims the larger PNG payload back
+    // down without touching image fidelity.
+    compress: true,
+  });
+
+  let firstPage = true;
+  for (const node of Array.from(container.children)) {
+    const { canvas, scale } = await captureNode(node);
+    for (const pageCanvas of sliceCanvasIntoPages(canvas, scale)) {
+      if (!firstPage) doc.addPage([pageWidth, pageHeight], 'portrait');
+      firstPage = false;
+      // PNG instead of JPEG: this is a raster snapshot of borders, hairline
+      // rules and small caps text, and JPEG's block compression visibly
+      // softens/artifacts exactly that kind of sharp-edge content.
+      const imgData = pageCanvas.toDataURL('image/png');
+      doc.addImage(imgData, 'PNG', PAGE_MARGIN, PAGE_MARGIN, RDO_PAGE_WIDTH, RDO_PAGE_HEIGHT, undefined, 'FAST');
+    }
+  }
+
+  const blob = doc.output('blob');
   await savePdfBlob(blob, filename);
 }
