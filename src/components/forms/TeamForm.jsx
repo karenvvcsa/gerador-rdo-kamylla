@@ -19,18 +19,20 @@ export default function TeamForm({ equipe, onChange }) {
         {equipe.map((item) => (
           <div
             key={item.id}
-            className="flex items-center gap-3 rounded-lg border border-gray-200 p-3"
+            className="flex items-center gap-2 sm:gap-3 rounded-lg border border-gray-200 p-3"
           >
             <input
-              className={inputClass}
+              className={inputClass + ' min-w-0 flex-1'}
               value={item.funcao}
               onChange={(e) => updateItem(item.id, { funcao: e.target.value })}
               placeholder="Função"
             />
-            <NumberStepper
-              value={item.qtd}
-              onChange={(qtd) => updateItem(item.id, { qtd })}
-            />
+            <div className="shrink-0">
+              <NumberStepper
+                value={item.qtd}
+                onChange={(qtd) => updateItem(item.id, { qtd })}
+              />
+            </div>
             <button
               type="button"
               onClick={() => removeItem(item.id)}

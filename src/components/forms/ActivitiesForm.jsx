@@ -26,7 +26,7 @@ export default function ActivitiesForm({ data, onChange }) {
           {data.atividades.map((line, i) => (
             <div key={i} className="flex items-center gap-2">
               <input
-                className={inputClass}
+                className={inputClass + ' min-w-0 flex-1'}
                 value={line}
                 onChange={(e) => updateLine(i, e.target.value)}
                 placeholder={`Atividade ${i + 1}`}
