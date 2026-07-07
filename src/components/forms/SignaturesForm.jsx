@@ -10,7 +10,7 @@ export default function SignaturesForm({ data, onChange }) {
         <h3 className="text-sm font-semibold uppercase tracking-wide text-primary-700">
           Preservar Engenharia
         </h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Data">
             <input
               type="date"
@@ -40,7 +40,7 @@ export default function SignaturesForm({ data, onChange }) {
         <h3 className="text-sm font-semibold uppercase tracking-wide text-primary-700">
           Fiscalização
         </h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Data">
             <input
               type="date"

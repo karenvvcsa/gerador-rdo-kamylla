@@ -18,7 +18,7 @@ export default function GeneralInfoForm({ data, onChange, logo, onLogoChange }) 
         <h3 className="text-sm font-semibold uppercase tracking-wide text-primary-700">
           Identificação
         </h3>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Nº RDO">
             <input
               className={inputClass}
@@ -88,7 +88,7 @@ export default function GeneralInfoForm({ data, onChange, logo, onLogoChange }) 
         </h3>
         <div>
           <span className="block text-xs font-semibold text-gray-500 mb-2">Horas Normais</span>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Início">
               <input
                 type="time"
@@ -111,7 +111,7 @@ export default function GeneralInfoForm({ data, onChange, logo, onLogoChange }) 
           <span className="block text-xs font-semibold text-gray-500 mb-2">
             Horas Sobre Aviso — Período 1
           </span>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Início">
               <input
                 type="time"
@@ -134,7 +134,7 @@ export default function GeneralInfoForm({ data, onChange, logo, onLogoChange }) 
           <span className="block text-xs font-semibold text-gray-500 mb-2">
             Horas Sobre Aviso — Período 2
           </span>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Field label="Início">
               <input
                 type="time"
